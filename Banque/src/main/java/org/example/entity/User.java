@@ -49,10 +49,6 @@ public class User {
         this.firstName = firstName;
     }
 
-    public List<Account> getAccounts() {
-        return accounts;
-    }
-
 
     public String getPhone() {
         return phone;

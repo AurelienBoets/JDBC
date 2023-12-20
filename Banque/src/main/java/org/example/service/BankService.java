@@ -38,22 +38,6 @@ public class BankService {
         }
     }
 
-    public boolean updateUser(User user){
-        try {
-            return userDao.update(user);
-        }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    public User getUser(int id){
-        try{
-            return userDao.get(id);
-        }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-    }
-
     public boolean deleteUser(User user){
         try {
             List<Account> userAccounts=userDao.getAccount(user);
@@ -71,7 +55,7 @@ public class BankService {
         try {
            user=userDao.userExist(user);
            if(user.getId()==0){
-               userDao.save(user);
+               createUser(firstName, lastName, phone);
            }
            return user;
         }catch (SQLException e){
@@ -98,14 +82,6 @@ public class BankService {
                 account.setBalance(account.getBalance()- transaction.getAmount());
                 return accountDao.update(account);
             }
-        }catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    public List<Transaction> getTransaction(Account account){
-        try {
-            return accountDao.getTransactions(account);
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
