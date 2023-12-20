@@ -25,7 +25,7 @@ public class AccountDao extends BaseDao<Account> {
         int nbRows=statement.executeUpdate();
         resultSet = statement.getGeneratedKeys();
         if(resultSet.next()){
-            element.setId(resultSet.getInt("id"));
+            element.setId(resultSet.getLong(1));
         }
         return nbRows==1;
     }
@@ -51,16 +51,21 @@ public class AccountDao extends BaseDao<Account> {
     }
 
     @Override
-    public Account get(int id) throws SQLException {
-        request="SELECT * FROM accounts WHERE id=?";
+    public Account get(long id) throws SQLException {
+        request="SELECT * FROM accounts INNER JOIN users ON user_id=users.id WHERE accounts.id=?";
         Account account=null;
         statement = _connection.prepareStatement(request);
-        statement.setInt(1,id);
+        statement.setLong(1,id);
         resultSet = statement.executeQuery();
         if(resultSet.next()){
             account=new Account(resultSet.getLong(1),
                     resultSet.getDouble(2)
                     );
+            User user=new User(resultSet.getLong(4),
+                    resultSet.getString(5),
+                    resultSet.getString(6),
+                    resultSet.getString(7));
+            account.setUser(user);
             account.setTransactions(getTransactions(account));
         }
         return account;
@@ -81,7 +86,7 @@ public class AccountDao extends BaseDao<Account> {
         return result;
     }
 
-    private List<Transaction> getTransactions(Account element) throws SQLException{
+    public List<Transaction> getTransactions(Account element) throws SQLException{
         List<Transaction> result=new ArrayList<>();
         request="SELECT * from transactions WHERE account_id=?";
         statement = _connection.prepareStatement(request);
@@ -90,7 +95,7 @@ public class AccountDao extends BaseDao<Account> {
         while(resultSet.next()){
             Transaction transaction=new Transaction(resultSet.getLong(1),
                     resultSet.getDouble(2),
-                    resultSet.getObject(3, TransactionEnum.class));
+                    TransactionEnum.valueOf(resultSet.getString(3)));
             result.add(transaction);
         }
         return result;
@@ -100,19 +105,19 @@ public class AccountDao extends BaseDao<Account> {
         request="DELETE FROM transactions WHERE account_id=?";
         statement=_connection.prepareStatement(request);
         statement.setLong(1,element.getId());
-        int nbRows= statement.executeUpdate();
+        statement.executeUpdate();
     }
 
     public boolean addTransaction(Transaction transaction,Account account) throws SQLException {
         request="INSERT INTO transactions (amount,status,account_id) VALUES(?,?,?)";
-        statement=_connection.prepareStatement(request);
+        statement=_connection.prepareStatement(request,Statement.RETURN_GENERATED_KEYS);
         statement.setDouble(1,transaction.getAmount());
-        statement.setObject(2,transaction.getStatus());
+        statement.setString(2, String.valueOf(transaction.getStatus()));
         statement.setLong(3,account.getId());
         int nbRows=statement.executeUpdate();
         resultSet = statement.getGeneratedKeys();
         if(resultSet.next()){
-            transaction.setId(resultSet.getInt("id"));
+            transaction.setId(resultSet.getLong(1));
         }
         return nbRows==1;
     }

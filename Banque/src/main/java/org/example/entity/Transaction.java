@@ -38,4 +38,13 @@ public class Transaction {
     public void setStatus(TransactionEnum status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Transaction{" +
+                "id=" + id +
+                ", total=%.2f"  +
+                ", status=" + (this.status==TransactionEnum.DEPOSIT ? "Dépôt" : "Retrait") +
+                '}',amount);
+    }
 }

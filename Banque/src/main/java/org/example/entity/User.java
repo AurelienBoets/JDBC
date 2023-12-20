@@ -25,6 +25,10 @@ public class User {
         this.phone = phone;
     }
 
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
     public long getId() {
         return id;
     }
@@ -48,8 +52,6 @@ public class User {
     public List<Account> getAccounts() {
         return accounts;
     }
-
-
 
 
     public String getPhone() {

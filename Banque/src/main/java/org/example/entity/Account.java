@@ -43,8 +43,19 @@ public class Account {
         return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public List<Transaction> getTransactions() {
         return transactions;
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", balance=" + balance +
+                '}';
+    }
 }

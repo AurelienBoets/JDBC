@@ -1,5 +1,6 @@
 package org.example.dao;
 
+import org.example.entity.Account;
 import org.example.entity.User;
 
 import java.sql.Connection;
@@ -23,7 +24,7 @@ public class UserDao extends BaseDao<User> {
         int nbRows = statement.executeUpdate();
         resultSet = statement.getGeneratedKeys();
         if(resultSet.next()){
-            element.setId(resultSet.getInt(1));
+            element.setId(resultSet.getLong(1));
         }
         return nbRows == 1;
     }
@@ -50,11 +51,11 @@ public class UserDao extends BaseDao<User> {
     }
 
     @Override
-    public User get(int id) throws SQLException {
+    public User get(long id) throws SQLException {
         request="SELECT * FROM users WHERE id=?";
         User user=null;
         statement = _connection.prepareStatement(request);
-        statement.setInt(1,id);
+        statement.setLong(1,id);
         resultSet = statement.executeQuery();
         if(resultSet.next()){
             user=new User(resultSet.getLong("id"),
@@ -80,5 +81,32 @@ public class UserDao extends BaseDao<User> {
         }
         return result;
     }
+     public List<Account> getAccount(User user) throws SQLException{
+        List<Account> result=new ArrayList<>();
+        request="SELECT * FROM accounts WHERE user_id=?";
+        statement= _connection.prepareStatement(request);
+        statement.setLong(1,user.getId());
+         resultSet = statement.executeQuery();
+         while(resultSet.next()){
+             Account account=new Account(resultSet.getLong(1),
+                     resultSet.getDouble(2));
+             result.add(account);
+         }
+         return result;
+     }
 
+     public User userExist(User user) throws SQLException {
+        request="SELECT * FROM users WHERE first_name=? AND last_name=? AND phone=?";
+        statement= _connection.prepareStatement(request);
+        statement.setString(1,user.getFirstName());
+        statement.setString(2,user.getLastName());
+        statement.setString(3,user.getPhone());
+        resultSet = statement.executeQuery();
+        if(resultSet.next()){
+            user.setId(resultSet.getLong(1));
+            user.setAccounts(getAccount(user));
+            return user;
+        }
+        return user;
+     }
 }
