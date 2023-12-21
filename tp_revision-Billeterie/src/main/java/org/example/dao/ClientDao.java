@@ -32,12 +32,12 @@ public class ClientDao extends BaseDao<Client> {
 
     @Override
     public boolean update(Client element) throws SQLException {
-        request="UPDATE clients SET nom=? AND prenom=? AND mail=? WHERE id=?";
+        request="UPDATE clients SET nom=? , prenom=? , mail=? WHERE id=?";
         statement= _connection.prepareStatement(request);
-        statement.setString(2, element.getNom());
-        statement.setString(3, element.getPrenom());
-        statement.setString(4, element.getEmail());
-        statement.setLong(1,element.getId());
+        statement.setString(1, element.getNom());
+        statement.setString(2, element.getPrenom());
+        statement.setString(3, element.getEmail());
+        statement.setLong(4,element.getId());
         int nbRows=statement.executeUpdate();
         return nbRows == 1;
     }

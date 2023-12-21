@@ -35,7 +35,7 @@ public class EvenementDao extends BaseDao<Evenement> {
 
     @Override
     public boolean update(Evenement element) throws SQLException {
-        request = "UPDATE evenements SET nom=? AND evenement_date=? AND heure=? AND prix=? AND lieu_id=? AND nbre_billet_vendu=? WHERE id=?";
+        request = "UPDATE evenements SET nom=? , evenement_date=? , heure=? , prix=? , lieu_id=? , nbre_billet_vendu=? WHERE id=?";
         statement = _connection.prepareStatement(request);
         statement.setString(1, element.getNom());
         statement.setDate(2, (Date) element.getDate());

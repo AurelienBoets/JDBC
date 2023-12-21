@@ -31,7 +31,7 @@ public class LieuDao extends BaseDao<Lieu> {
 
     @Override
     public boolean update(Lieu element) throws SQLException {
-        request="UPDATE lieux SET nom=? AND adresse=? AND capacite=? WHERE id=?";
+        request="UPDATE lieux SET nom=?, adresse=? , capacite=? WHERE id=?";
         statement= _connection.prepareStatement(request);
         statement.setString(1, element.getNom());
         statement.setString(2, element.getAdresse());
@@ -89,7 +89,7 @@ public class LieuDao extends BaseDao<Lieu> {
                     resultSet.getString(3),
                     resultSet.getInt(4)
             );
-            lieu.setId(resultSet.getLong(5));
+            lieu.setId(resultSet.getLong(1));
             result.add(lieu);
         }
         return result;
