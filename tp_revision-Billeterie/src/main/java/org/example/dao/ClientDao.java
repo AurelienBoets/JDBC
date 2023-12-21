@@ -92,7 +92,7 @@ public class ClientDao extends BaseDao<Client> {
                     resultSet.getString(3),
                     resultSet.getString(4)
             );
-            client.setId(resultSet.getLong(5));
+            client.setId(resultSet.getLong(1));
             result.add(client);
         }
         return result;
