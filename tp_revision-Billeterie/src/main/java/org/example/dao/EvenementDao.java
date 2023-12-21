@@ -3,9 +3,8 @@ package org.example.dao;
 import org.example.entity.Client;
 import org.example.entity.Evenement;
 import org.example.entity.Lieu;
-
+import java.util.Date;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class EvenementDao extends BaseDao<Evenement> {
         request = "INSERT INTO evenements (nom,evenement_date,heure,prix,lieu_id) VALUES (?,?,?,?,?)";
         statement = _connection.prepareStatement(request, Statement.RETURN_GENERATED_KEYS);
         statement.setString(1, element.getNom());
-        statement.setDate(2, (Date) element.getDate());
+        statement.setDate(2, java.sql.Date.valueOf(String.valueOf(element.getDate())));
         statement.setString(3, element.getHeure());
         statement.setFloat(4, element.getPrix());
         statement.setLong(5, element.getLieu().getId());
@@ -38,7 +37,7 @@ public class EvenementDao extends BaseDao<Evenement> {
         request = "UPDATE evenements SET nom=? , evenement_date=? , heure=? , prix=? , lieu_id=? , nbre_billet_vendu=? WHERE id=?";
         statement = _connection.prepareStatement(request);
         statement.setString(1, element.getNom());
-        statement.setDate(2, (Date) element.getDate());
+        statement.setDate(2, java.sql.Date.valueOf(String.valueOf(element.getDate())));
         statement.setString(3, element.getHeure());
         statement.setFloat(4, element.getPrix());
         statement.setLong(5, element.getLieu().getId());
