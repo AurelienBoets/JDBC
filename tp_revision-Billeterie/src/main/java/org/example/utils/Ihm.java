@@ -392,10 +392,10 @@ public class Ihm {
                 System.out.println("le CLient a bien ete ajouter :");
             else
                 System.out.println("Erreur lors de la création");
-            this.menuEvenement();
+            this.menuCLient();
         } catch (InputMismatchException e) {
             System.out.println("entrer une valeur numerique ");
-            this.addEvenement();
+            this.addClient();
         }
     }
 
