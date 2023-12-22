@@ -20,7 +20,7 @@ public class EvenementDao extends BaseDao<Evenement> {
         request = "INSERT INTO evenements (nom,evenement_date,heure,prix,lieu_id) VALUES (?,?,?,?,?)";
         statement = _connection.prepareStatement(request, Statement.RETURN_GENERATED_KEYS);
         statement.setString(1, element.getNom());
-        statement.setDate(2, java.sql.Date.valueOf(String.valueOf(element.getDate())));
+        statement.setDate(2, new java.sql.Date(element.getDate().getTime()));
         statement.setString(3, element.getHeure());
         statement.setFloat(4, element.getPrix());
         statement.setLong(5, element.getLieu().getId());
@@ -37,7 +37,7 @@ public class EvenementDao extends BaseDao<Evenement> {
         request = "UPDATE evenements SET nom=? , evenement_date=? , heure=? , prix=? , lieu_id=? , nbre_billet_vendu=? WHERE id=?";
         statement = _connection.prepareStatement(request);
         statement.setString(1, element.getNom());
-        statement.setDate(2, java.sql.Date.valueOf(String.valueOf(element.getDate())));
+        statement.setDate(2,new java.sql.Date(element.getDate().getTime()) );
         statement.setString(3, element.getHeure());
         statement.setFloat(4, element.getPrix());
         statement.setLong(5, element.getLieu().getId());
@@ -75,7 +75,7 @@ public class EvenementDao extends BaseDao<Evenement> {
         if (resultSet.next()) {
             evenement = new Evenement(
                     resultSet.getString(2),
-                    resultSet.getDate(3),
+                    new Date(resultSet.getDate(3).getTime()),
                     resultSet.getString(4),
                     resultSet.getFloat(5),
                     new Lieu(
@@ -99,7 +99,7 @@ public class EvenementDao extends BaseDao<Evenement> {
         while (resultSet.next()) {
             Evenement evenement = new Evenement(
                     resultSet.getString(2),
-                    resultSet.getDate(3),
+                    new Date(resultSet.getDate(3).getTime()),
                     resultSet.getString(4),
                     resultSet.getFloat(5),
                     new Lieu(
